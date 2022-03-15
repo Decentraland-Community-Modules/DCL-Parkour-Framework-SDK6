@@ -20,10 +20,7 @@ export class cmParkourStyleDict
         for(var i:number=0; i<data_platform_styles.length; i++)
         {
             //add all platforms for style to collection
-            this.StyleDict.add("static_"+data_platform_styles[i].type, data_platform_styles[i].platform_static);
-            this.StyleDict.add("pathing_"+data_platform_styles[i].type, data_platform_styles[i].platform_pathing);
-            this.StyleDict.add("rotating_"+data_platform_styles[i].type, data_platform_styles[i].platform_rotating);
-            this.StyleDict.add("blinking_"+data_platform_styles[i].type, data_platform_styles[i].platform_blinking);
+            this.StyleDict.add(data_platform_styles[i].type, data_platform_styles[i].path);
         }
     }
 }

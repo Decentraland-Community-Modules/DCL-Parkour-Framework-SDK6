@@ -8,29 +8,27 @@ export const data_platform_styles =
         //call-tag
         type:   "debugging",
         //model location paths
-        platform_static: "dsPlatform",
-        platform_pathing: "dsPlatform",
-        platform_rotating: "dsPlatform",
-        platform_blinking: "dsPlatform"
+        path: "dsPlatformDebugging"
     },
     //metallic
     {
         //call-tag
-        type:   "metallic",
+        type:   "metal",
         //model location paths
-        platform_static: "dsPlatform",
-        platform_pathing: "dsPlatform",
-        platform_rotating: "dsPlatform",
-        platform_blinking: "dsPlatform"
+        path: "dsPlatformMetal"
     },
-    //neon
+    //wood
     {
         //call-tag
-        type:   "neon",
+        type:   "wood",
         //model location paths
-        platform_static: "dsPlatform",
-        platform_pathing: "dsPlatform",
-        platform_rotating: "dsPlatform",
-        platform_blinking: "dsPlatform"
+        path: "dsPlatformWood"
+    },
+    //stone
+    {
+        //call-tag
+        type:   "stone",
+        //model location paths
+        path: "dsPlatformStone"
     }
 ]

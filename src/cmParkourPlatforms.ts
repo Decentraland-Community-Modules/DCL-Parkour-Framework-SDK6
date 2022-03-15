@@ -72,7 +72,7 @@ export class cmParkourPlatformStatic extends cmParkourPlatform
         super();
         //  add style
         this.addComponent(new GLTFShape("models/"+
-            cmParkourStyleDict.INSTANCE.StyleDict.getItem("static_"+data_platform_objects_static[defIndex].style)+".glb"));
+            cmParkourStyleDict.INSTANCE.StyleDict.getItem(data_platform_objects_static[defIndex].style)+".glb"));
         //this.addComponent(new BoxShape());
         //  set position and scale
         var pos = data_platform_objects_static[defIndex].position.split('_');
@@ -114,7 +114,7 @@ export class cmParkourPlatformPathing extends cmParkourPlatform
         this.parentingEntity.setParent(this);    
         //  add style
         this.parentingEntity.addComponent(new GLTFShape("models/"+
-            cmParkourStyleDict.INSTANCE.StyleDict.getItem("pathing_"+data_platform_objects_pathing[defIndex].style)+".glb"));
+            cmParkourStyleDict.INSTANCE.StyleDict.getItem(data_platform_objects_pathing[defIndex].style)+".glb"));
         //  set position and scale
         this.parentingEntity.addComponent(new Transform());
         engine.addEntity(this);
@@ -247,7 +247,7 @@ export class cmParkourPlatformRotating extends cmParkourPlatform
         this.parentingEntity.setParent(this);    
         //  add style
         this.parentingEntity.addComponent(new GLTFShape("models/"+
-            cmParkourStyleDict.INSTANCE.StyleDict.getItem("rotating_"+data_platform_objects_rotating[defIndex].style)+".glb"));
+            cmParkourStyleDict.INSTANCE.StyleDict.getItem(data_platform_objects_rotating[defIndex].style)+".glb"));
         //  set position and scale
         this.parentingEntity.addComponent(new Transform());
         engine.addEntity(this);
@@ -324,7 +324,7 @@ export class cmParkourPlatformBlinking extends cmParkourPlatform
         this.parentingEntity.setParent(this);    
         //  add style
         this.parentingEntity.addComponent(new GLTFShape("models/"+
-            cmParkourStyleDict.INSTANCE.StyleDict.getItem("blinking_"+data_platform_objects_blinking[defIndex].style)+".glb"));
+            cmParkourStyleDict.INSTANCE.StyleDict.getItem(data_platform_objects_blinking[defIndex].style)+".glb"));
         //  set position and scale
         this.parentingEntity.addComponent(new Transform());
         engine.addEntity(this);

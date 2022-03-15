@@ -68,7 +68,7 @@ export const data_platform_objects_static =
         set:        "Bravo",
         tag:        "5",
         parent:     "rotating_0",
-        style:      "debugging",
+        style:      "stone",
         //transform details
         position:   "5_0_0",
         scale:      "1_1_1",
@@ -79,7 +79,7 @@ export const data_platform_objects_static =
         set:        "Bravo",
         tag:        "6",
         parent:     "rotating_0",
-        style:      "debugging",
+        style:      "stone",
         //transform details
         position:   "-5_0_0",
         scale:      "1_1_1",
@@ -91,7 +91,7 @@ export const data_platform_objects_static =
         set:        "Bravo",
         tag:        "7",
         parent:     "",
-        style:      "debugging",
+        style:      "stone",
         //transform details
         position:   "21_7_14",
         scale:      "1_1_1",
@@ -103,7 +103,7 @@ export const data_platform_objects_static =
         set:        "Bravo",
         tag:        "8",
         parent:     "",
-        style:      "debugging",
+        style:      "stone",
         //transform details
         position:   "25_7_2",
         scale:      "1_1_1",
@@ -119,7 +119,7 @@ export const data_platform_objects_pathing =
         set:        "Alpha,Bravo",
         tag:        "0",
         parent:     "",
-        style:      "debugging",
+        style:      "wood",
         //transform details
         position:   "2_3_11",
         scale:      "1_1_1",
@@ -139,7 +139,7 @@ export const data_platform_objects_pathing =
         set:        "Alpha,Bravo",
         tag:        "1",
         parent:     "",
-        style:      "debugging",
+        style:      "wood",
         //transform details
         position:   "2_7_14",
         scale:      "1_1_1",
@@ -158,7 +158,7 @@ export const data_platform_objects_pathing =
         set:        "Bravo",
         tag:        "2",
         parent:     "",
-        style:      "debugging",
+        style:      "wood",
         //transform details
         position:   "5_7_22",
         scale:      "1_1_1",
@@ -181,7 +181,7 @@ export const data_platform_objects_rotating =
         set:        "Bravo",
         tag:        "0",
         parent:     "",
-        style:      "debugging",
+        style:      "metal",
         //transform details
         position:   "21_7_22",
         scale:      "1_1_1",
@@ -198,7 +198,7 @@ export const data_platform_objects_blinking =
         set:        "Bravo",
         tag:        "0",
         parent:     "",
-        style:      "debugging",
+        style:      "metal",
         //transform details
         position:   "21_7_10",
         scale:      "1_1_1",
@@ -213,7 +213,7 @@ export const data_platform_objects_blinking =
         set:        "Bravo",
         tag:        "1",
         parent:     "",
-        style:      "debugging",
+        style:      "metal",
         //transform details
         position:   "21_7_6",
         scale:      "1_1_1",
@@ -228,7 +228,7 @@ export const data_platform_objects_blinking =
         set:        "Bravo",
         tag:        "2",
         parent:     "",
-        style:      "debugging",
+        style:      "metal",
         //transform details
         position:   "21_7_2",
         scale:      "1_1_1",
