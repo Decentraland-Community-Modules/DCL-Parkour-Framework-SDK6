@@ -2,6 +2,8 @@
 
 This module provides users an easy to use interface for creating and managing parkour stages. You can define platforms of four given types (static, pathed, rotating, and blinking), define an in-stage parent, and dynamically dis/enable individual sets in an active scene.
 
+![firefox_srr356tgFU](https://user-images.githubusercontent.com/91359820/197311376-d3ce5d3c-7389-4ebb-b073-38a30e7d5ec2.png)
+
 This module has been heavily documented and will work as-is/out of the box. You can try it out here:
 
 https://decentraland-parkour-kit.herokuapp.com/
