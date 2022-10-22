@@ -1,75 +1,56 @@
-/*      PARKOUR START
-    this handles the initialization of the parkour module. 
+/*      PARKOUR DEMO SCENE
+    
 
     Author: Alex Pazder, thecryptotrader69@gmail.com
 */
+//imports
+import * as utils from '@dcl/ecs-scene-utils'
+import { movePlayerTo } from '@decentraland/RestrictedActions'
+import { ParkourManager } from "src/parkour-core/parkour-manager";
 
-//import module manager
-import { cmParkourManager } from "./cmParkourManager";
-import { cmParkourStyleDict } from "./cmParkourStyleDict";
+//module setup
+//  create parkour manager
+var managerObj:ParkourManager = new ParkourManager();
+//  activate set initial set
+managerObj.ActivateSet("Charlie");
 
-        
-//initialize style dict
-var styleDict:cmParkourStyleDict = new cmParkourStyleDict();
-
-//create and intialize instance of manager
-var managerObj:cmParkourManager = new cmParkourManager();
-
-//activate set 'Alpha' by default
-managerObj.ActivateSet("Bravo");
-
-//add buttons for in-scene set swapping
-//  clears scene
-var buttonClear = new Entity();
-buttonClear.addComponent(new BoxShape());
-buttonClear.addComponent(new Transform({position: new Vector3(13, 1, 2)}));
-buttonClear.addComponent(
-    //add click action listener
-    new OnPointerDown
-    ( 
-        (e) =>  { managerObj.DisablePlatforms(); },
-        {
-            button: ActionButton.PRIMARY,
-            showFeedback: true,
-            hoverText: "Clear",
-            distance: 8,
-        }
+//stage setup
+//  create arena
+const arenaEntity = new Entity();
+arenaEntity.addComponent(new GLTFShape("models/stageLava.glb"));
+engine.addEntity(arenaEntity);
+//  create start platform
+const arenaStartEntity = new Entity();
+arenaStartEntity.addComponent(new GLTFShape("models/platformStart.glb"));
+arenaStartEntity.addComponent(new Transform({position: new Vector3(24, 1, 5)}));
+engine.addEntity(arenaStartEntity);
+//  create respawn on lava touch
+//      edit player collider
+utils.TriggerSystem.instance.setCameraTriggerShape(
+    new utils.TriggerBoxShape(
+      new Vector3(2.01, 1.01, 2.01),   //scale
+      new Vector3(0, -0.75, 0)      //position
     )
-);
-engine.addEntity(buttonClear);
-//  set alpha
-var buttonAlpha = new Entity();
-buttonAlpha.addComponent(new BoxShape());
-buttonAlpha.addComponent(new Transform({position: new Vector3(16, 1, 2)}));
-buttonAlpha.addComponent(
-    //add click action listener
-    new OnPointerDown
-    ( 
-        (e) =>  { managerObj.ActivateSet("Alpha"); },
+  )
+//      entity
+const deathEntity = new Entity();
+deathEntity.addComponent(new BoxShape());
+//deathEntity.addComponent(new Transform({ position: new Vector3(24, 0.25, 24), scale: new Vector3(8, 0.5, 8) }));
+deathEntity.addComponent(new Transform({ position: new Vector3(24, 0.25, 24), scale: new Vector3(43, 0.5, 43) }));
+deathEntity.getComponent(BoxShape).withCollisions = false;
+deathEntity.getComponent(BoxShape).visible = false;
+//      trigger
+let deathTrigger = new utils.TriggerBoxShape(deathEntity.getComponent(Transform).scale);
+deathEntity.addComponent(
+  new utils.TriggerComponent(
+    deathTrigger,
+	{
+		onCameraEnter :() => 
         {
-            button: ActionButton.PRIMARY,
-            showFeedback: true,
-            hoverText: "Set Alpha",
-            distance: 8,
-        }
-    )
+			log('triggered!');
+            movePlayerTo({ x: 24, y: 2, z: 5 }, { x: 24, y: 2, z: 24 });
+		}
+	}
+  )
 );
-engine.addEntity(buttonAlpha);
-//  set bravo
-var buttonBravo = new Entity();
-buttonBravo.addComponent(new BoxShape());
-buttonBravo.addComponent(new Transform({position: new Vector3(19, 1, 2)}));
-buttonBravo.addComponent(
-    //add click action listener
-    new OnPointerDown
-    ( 
-        (e) =>  { managerObj.ActivateSet("Bravo"); },
-        {
-            button: ActionButton.PRIMARY,
-            showFeedback: true,
-            hoverText: "Set Bravo",
-            distance: 8,
-        }
-    )
-);
-engine.addEntity(buttonBravo);
+engine.addEntity(deathEntity);

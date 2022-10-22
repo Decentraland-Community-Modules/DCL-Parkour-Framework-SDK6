@@ -1,0 +1,49 @@
+{
+  "display": 
+  {
+    "title": "DCL Parkour Creation Kit",
+    "description": "Provides easy access to complex creation!",
+    "navmapThumbnail": "images/scene-thumbnail.png",
+    "favicon": "favicon_asset"
+  },
+  "contact": 
+  {
+    "name": "Alex Pazder",
+    "email": "TheCryptoTrader69@gmail.com"
+  },
+  "owner": "",
+  "scene": 
+  {
+    "parcels": 
+    [
+      "0,0",
+      "1,0",
+      "0,1",
+      "1,1"
+    ],
+    "base": "0,0"
+  },
+  "requiredPermissions": [],
+  "main": "bin/game.js",
+  "tags": [],
+  "spawnPoints": 
+  [
+    {
+      "name": "spawn1",
+      "default": true,
+      "position": 
+      {
+        "x": 16,
+        "y": 0,
+        "z": 1
+      },
+      "cameraTarget": 
+      {
+        "x": 16,
+        "y": 1,
+        "z": 16
+      }
+    }
+  ],
+  "featureToggles": {}
+}
