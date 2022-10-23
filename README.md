@@ -23,11 +23,11 @@ You can find more information regarding mechanics inside each of these files.
 
 TODO LIST:
 
-	-pending...
+	pending...
 
 BUG LIST:
 
-	-scene can stall-out if certain conditions are met when interacting with browser (grabbing/resizing window when out of focus, but not 100% reproducable); this appears to be a framework-sided issue and not something that can currently be fixed through the module.
+	scene can stall-out if certain conditions are met when interacting with browser (grabbing/resizing window when out of focus, but not 100% reproducable); this appears to be a framework-sided issue and not something that can currently be fixed through the module.
 
 If you run into any issues, send me an e-mail at: 
   thecryptotrader69@gmail.com
