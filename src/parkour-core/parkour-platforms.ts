@@ -1,85 +1,27 @@
 /*      PARKOUR PLATFORMS
-    contains the different types of platforms that can be
-    instansiated by the module.
-
-
+    contains all platform object types that can be created via
+    the parkour manager.
 
     Author: Alex Pazder, thecryptotrader69@gmail.com
 */
-import { Dictionary, List } from "src/utilities/collections";
+import { ParkourObject } from "./parkour-object";
 import 
 { 
     platform_object_data_static,
     platform_object_data_pathing,
     platform_object_data_rotating,
-    platform_object_data_blinking 
-} from "src/parkour-core/platform-object-data";
-
-//  core platform definition used for general collection storage
-export class ParkourPlatform extends Entity 
+    platform_object_data_toggling 
+} from "./config/platform-config";
+import 
 {
-    //entity targeted for parenting another system to this platform
-    public parentingEntity:Entity;
-    //entity this platform will be parented to when activated
-    public parentedEntity:Entity;
-    //entity's system component
-    public system:ISystem|undefined;
-
-    //constructor
-    //  takes in transform data from any inheriting class
-    constructor(position:string, scale:string, rotation:string)
-    {
-        super();
-
-        //assign default entity identities
-        this.parentingEntity = this;
-        this.parentedEntity = this;
-
-        //  set position and scale
-        var pos = position.split('_');
-        var sca = scale.split('_');
-        var rot = rotation.split('_');
-        this.addComponent(new Transform
-        ({
-            position: new Vector3(+pos[0],+pos[1],+pos[2]),
-            scale: new Vector3(+sca[0],+sca[1],+sca[2]),
-            rotation: new Quaternion().setEuler(+rot[0],+rot[1],+rot[2])
-        }));
-    }
-
-    public DefineParent(par:Entity)
-    {
-        this.setParent(par);
-        this.parentedEntity = par;
-    }
-
-    //adds this platform to the scene
-    public ActivateObject() 
-    { 
-        engine.addEntity(this); 
-    }
-    //attempts to parent this object to its designated parent
-    public VerifyParent() 
-    {
-        this.setParent(this.parentedEntity);
-    }
-    public ActivateSystem() 
-    {
-        if(this.system != undefined) engine.addSystem(this.system); 
-    }
-
-    //removes this platform from the scene
-    public Deactivate() 
-    {
-        if(this.system != undefined) engine.removeSystem(this.system);
-        this.setParent(null);
-        engine.removeEntity(this); 
-    }
-}
+    ParkourPathingSystem,
+    ParkourRotatingSystem,
+    ParkourBlinkingSystem 
+} from "./parkour-systems";
 
 //  static platform
-@Component("cmParkourPlatformStatic")
-export class cmParkourPlatformStatic extends ParkourPlatform 
+@Component("ParkourPlatformStatic")
+export class ParkourPlatformStatic extends ParkourObject 
 {
     //constructor
     constructor(defIndex:number, shape:GLTFShape)
@@ -88,17 +30,14 @@ export class cmParkourPlatformStatic extends ParkourPlatform
 
         //add model
         this.addComponent(shape);
-
-        //add to engine
-        engine.addEntity(this);
     }
 }
 
 //   pathed moving platform
-@Component("cmParkourPlatformPathing")
-export class cmParkourPlatformPathing extends ParkourPlatform 
+@Component("ParkourPlatformPathing")
+export class ParkourPlatformPathing extends ParkourObject 
 {
-    private systemPathing:cmParkourPlatformPathingSystem;
+    private systemPathing:ParkourPathingSystem;
 
     //constructor
     constructor(defIndex:number, shape:GLTFShape)
@@ -112,120 +51,40 @@ export class cmParkourPlatformPathing extends ParkourPlatform
         this.parentingEntity.addComponent(shape);
         //  set position and scale
         this.parentingEntity.addComponent(new Transform());
-        engine.addEntity(this);
 
         //create pathing system
-        this.systemPathing = new cmParkourPlatformPathingSystem(defIndex, this.parentingEntity);
+        this.systemPathing = new ParkourPathingSystem(defIndex, this.parentingEntity);
         this.system = this.systemPathing;
-
-        //add to engine
-        engine.addSystem(this.systemPathing);
     }
 
+    //activates the attached system
     public ActivateSystem() 
     {
+        //default, then add system
         this.systemPathing.Reset();
-        if(this.system != undefined) engine.addSystem(this.system); 
-    }
-}
-//   movement system for pathed platforms
-@Component("cmParkourPlatformPathingSystem")
-export class cmParkourPlatformPathingSystem implements ISystem  
-{
-    //timing
-    private length:number;
-    private distance:number; 
-
-    //pathing
-    public pathingIndexes:number[];
-    public pathingPoints:List<Vector3>;
-
-    public pathingEntityTransform:Transform;
-
-    //constructor
-    constructor(defIndex:number, obj:Entity)
-    {
-        this.length = +platform_object_data_pathing[defIndex].length;
-        this.distance = 0;
-
-        //set object
-        this.pathingEntityTransform = obj.getComponent(Transform);
-
-        //create list of all pathing nodes
-        this.pathingPoints = new List<Vector3>();
-        for(var i:number=0; i<platform_object_data_pathing[defIndex].waypoints.length; i++)
-        {
-            var pos = platform_object_data_pathing[defIndex].waypoints[i].position.split('_');
-            this.pathingPoints.addItem(new Vector3(+pos[0],+pos[1],+pos[2]));
-        }
-
-        //set pathing target
-        this.pathingIndexes = [0, 0];
-        if(this.pathingPoints.size() > 1)
-        {
-            this.pathingIndexes[1] = 1;
-        }
-    }
-    
-    update(dt: number) 
-    {
-        //process object movement between points
-        if (this.distance < 1) 
-        {
-            this.pathingEntityTransform.position = 
-                Vector3.Lerp(
-                    this.pathingPoints.getItem(this.pathingIndexes[0]), 
-                    this.pathingPoints.getItem(this.pathingIndexes[1]), 
-                    this.distance);
-            this.distance +=  dt / this.length;
-        } 
-        //push to next waypoint
-        else 
-        {
-          this.nextTarget();
-          this.distance = 0;
-        }
+        if(this.system != undefined) engine.addSystem(this.systemPathing); 
     }
 
-    private nextTarget()
+    //removes this  object and system from the scene
+    public Deactivate() 
     {
-        //increase primary pathing waypoint
-        this.pathingIndexes[0]++;
-        //check for roll-over
-        if(this.pathingIndexes[0] >= this.pathingPoints.size())
+        //check object existance in-engine
+        if(this.isAddedToEngine())
         {
-            this.pathingIndexes[0] = 0;
-        }
-        //increase secondary pathing waypoint
-        this.pathingIndexes[1] = this.pathingIndexes[0]+1;
-        //check for roll-over
-        if(this.pathingIndexes[1] >= this.pathingPoints.size())
-        {
-            this.pathingIndexes[1] = 0;
-        }
-    }
+            //remove system
+            engine.removeSystem(this.systemPathing);
 
-    //sets the default state of platform's system
-    public Reset()
-    {
-        //set core values
-        this.distance = 0;
-
-        //reset path
-        this.pathingIndexes[0] = 0;
-        this.pathingIndexes[1] = 1;
-        if(this.pathingIndexes[1] >= this.pathingPoints.size())
-        {
-            this.pathingIndexes[1] = 0;
+            //remove object, with any child objects
+            engine.removeEntity(this);
         }
     }
 }
 
 //   rotating platform
-@Component("cmParkourPlatformRotating")
-export class cmParkourPlatformRotating extends ParkourPlatform 
+@Component("ParkourPlatformRotating")
+export class ParkourPlatformRotating extends ParkourObject 
 {
-    private systemRotating:cmParkourPlatformRotatingSystem;
+    private systemRotating:ParkourRotatingSystem;
 
     //constructor
     constructor(defIndex:number, shape:GLTFShape)
@@ -239,64 +98,43 @@ export class cmParkourPlatformRotating extends ParkourPlatform
         this.parentingEntity.addComponent(shape);
         //  set position and scale
         this.parentingEntity.addComponent(new Transform());
-        engine.addEntity(this);
 
         //create rotating system
-        this.systemRotating = new cmParkourPlatformRotatingSystem(defIndex, this.parentingEntity);
+        this.systemRotating = new ParkourRotatingSystem(defIndex, this.parentingEntity);
         this.system = this.systemRotating;
-        engine.addSystem(this.system);
     }
 
+    //activates the attached system
     public ActivateSystem() 
     {
         this.systemRotating.Reset();
-        if(this.system != undefined) engine.addSystem(this.system); 
-    }
-}
-//   rotation system for rotating platforms
-@Component("cmParkourPlatformRotatingSystem")
-export class cmParkourPlatformRotatingSystem implements ISystem  
-{
-    public rotationStart:Vector3;
-    public rotationSpeed:Vector3;
-
-    public pathingEntityTransform:Transform;
-
-    //constructor
-    constructor(defIndex:number, obj:Entity)
-    {
-        //set object
-        this.pathingEntityTransform = obj.getComponent(Transform);
-        this.rotationStart = this.pathingEntityTransform.eulerAngles;
-
-        //set rotation start target
-        var ros = platform_object_data_rotating[defIndex].rotationSpeed.split('_');
-        this.rotationSpeed = new Vector3(+ros[0], +ros[1], +ros[2]);
-    }
-    
-    update(dt: number) 
-    {
-        this.pathingEntityTransform.rotate(Axis.X, this.rotationSpeed.x);
-        this.pathingEntityTransform.rotate(Axis.Y, this.rotationSpeed.y);
-        this.pathingEntityTransform.rotate(Axis.Z, this.rotationSpeed.x);
+        if(this.systemRotating != undefined) engine.addSystem(this.systemRotating); 
     }
 
-    //sets the default state of platform's system
-    public Reset()
+    //removes this  object and system from the scene
+    public Deactivate() 
     {
-        this.pathingEntityTransform.rotation = Quaternion.Euler(this.rotationStart.x,this.rotationStart.y,this.rotationStart.z);
+        //check object existance in-engine
+        if(this.isAddedToEngine())
+        {
+            //remove system
+            engine.removeSystem(this.systemRotating);
+
+            //remove object, with any child objects
+            engine.removeEntity(this);
+        }
     }
 }
 
 //   blinking platform
-@Component("cmParkourPlatformBlinking")
-export class cmParkourPlatformBlinking extends ParkourPlatform 
+@Component("ParkourPlatformBlinking")
+export class ParkourPlatformBlinking extends ParkourObject 
 {
-    private systemBlinking:cmParkourPlatformBlinkingSystem;
+    private systemBlinking:ParkourBlinkingSystem;
 
     constructor(defIndex:number, shape:GLTFShape)
     {
-        super(platform_object_data_blinking[defIndex].position, platform_object_data_blinking[defIndex].scale, platform_object_data_blinking[defIndex].rotation);
+        super(platform_object_data_toggling[defIndex].position, platform_object_data_toggling[defIndex].scale, platform_object_data_toggling[defIndex].rotation);
         
         //create blinking entity
         this.parentingEntity = new Entity();
@@ -304,105 +142,37 @@ export class cmParkourPlatformBlinking extends ParkourPlatform
         //  add style
         this.parentingEntity.addComponent(shape);
         //  set position and scale
-        this.parentingEntity.addComponent(new Transform());
-        engine.addEntity(this);
+        this.parentingEntity.addComponent(new Transform
+            ({
+                position: new Vector3(0,0,0),
+                scale: new Vector3(1,1,1),
+                rotation: new Quaternion().setEuler(0,0,0)
+            }));
 
-        //create blinking system
-        var state:number;
-        if(platform_object_data_blinking[defIndex].cycleStart == "on")
-        {
-            state = 0;
-        }
-        else
-        {
-            state = 1;
-        }
-
-        this.systemBlinking = new cmParkourPlatformBlinkingSystem(defIndex, this.parentingEntity, state);
+        //create system
+        this.systemBlinking = new ParkourBlinkingSystem(defIndex, this.parentingEntity);
         this.system = this.systemBlinking;
-        engine.addSystem(this.system);
     }
 
+    //activates the attached system
     public ActivateSystem() 
     {
+        //default, then add system
         this.systemBlinking.Reset();
-        if(this.system != undefined) engine.addSystem(this.system); 
-    }
-}
-//   blink system for blinking platforms
-@Component("cmParkourPlatformRotatingSystem")
-export class cmParkourPlatformBlinkingSystem implements ISystem  
-{
-    //state toggles
-    private toggleDefault:number;
-    private toggle:number;
-    private length:number[];
-
-    //timer count
-    private timer:number;
-
-    private parent:IEntity|null;
-    private entity:Entity;
-
-    //constructor
-    constructor(defIndex:number, obj:Entity, state:number)
-    {
-        this.toggleDefault = state;
-        this.toggle = state;
-
-        this.length = 
-        [
-            +platform_object_data_blinking[defIndex].timeOn,
-            +platform_object_data_blinking[defIndex].timeOff
-        ];
-        this.timer = 0;
-
-        //set reset parent and get object's transform
-        this.parent = obj.getParent();
-        this.entity = obj;
-    }
-    
-    update(dt: number) 
-    {
-        //check timer for toggle
-        if (this.timer < this.length[this.toggle]) 
-        {
-          this.timer += dt;
-        }
-        //roll over into next iteration
-        else
-        {
-            this.timer = 0;
-            //change toggle
-            if(this.toggle == 0)
-            {
-                this.toggle = 1;
-                this.entity.setParent(this.parent);
-                engine.addEntity(this.entity);
-            }
-            else
-            {
-                this.toggle = 0;
-                this.entity.setParent(null);
-                engine.removeEntity(this.entity);
-            }
-        }
+        if(this.system != undefined) engine.addSystem(this.systemBlinking); 
     }
 
-    //sets the default state of platform's system
-    public Reset()
+    //removes this  object and system from the scene
+    public Deactivate() 
     {
-        this.timer = 0;
-        this.toggle = this.toggleDefault;
-        if(this.toggle == 0)
+        //check object existance in-engine
+        if(this.isAddedToEngine())
         {
-            this.entity.setParent(this.parent);
-            engine.addEntity(this.entity);
-        }
-        else
-        {
-            this.entity.setParent(null);
-            engine.removeEntity(this.entity);
+            //remove system
+            engine.removeSystem(this.systemBlinking);
+
+            //remove object, with any child objects
+            engine.removeEntity(this);
         }
     }
 }

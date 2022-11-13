@@ -1,34 +1,28 @@
-/*      PLATFORM STYLE DATA
+/*      PLATFORM DATA
     holds styling data links to all graphics for platforms
 */
-export const platform_style_data = 
+export const platform_data = 
 [
     //debugging/default
     {
         //call-tag
-        type:   "debugging",
+        type: "debugging",
         //model location paths
         path: "platformDebugging"
     },
     //metallic
     {
-        //call-tag
-        type:   "metal",
-        //model location paths
+        type: "metal",
         path: "platformMetal"
     },
     //wood
     {
-        //call-tag
-        type:   "wood",
-        //model location paths
+        type: "wood",
         path: "platformWood"
     },
     //stone
     {
-        //call-tag
-        type:   "stone",
-        //model location paths
+        type: "stone",
         path: "platformStone"
     }
 ]
