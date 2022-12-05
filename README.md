@@ -17,15 +17,15 @@ or by downloading the scene and running it locally (ensure you have the DCL SDK 
 
 File Overview:
 
-	parkour-core: contains all primary module features
-	   parkour-manager: manages all parkour objects within the scene and handles set enable/disable requests
-	   parkour-<object>: each object contains their own functionality file (ie: platform/trap), where you can view their functions/systems
-	   /config: contains data that defines placement for objects around the scene (if new, start here!)
-	   /data: contains data that defines styles and object defaults that will be used by the system
+	game.ts: demo of on-start code
 	utilities: bundled library for secondary/support features
 	   collections.ts: lists and dicts
 	   menu-group-2D.ts: easy management system for creating 2D HUD/menu
-	game.ts: demo of on-start code
+	parkour-core: contains all primary module features
+	   /config: contains data that defines placement for objects around the scene (if new, start here!)
+	   /data: contains data that defines styles and object defaults that will be used by the system
+	   parkour-manager: manages all parkour objects within the scene and handles set enable/disable requests
+	   parkour-<object>: each object contains their own functionality file (ie: platform/trap), where you can view their functions/systems
 
 You can find more information regarding mechanics inside each of these files.
 
