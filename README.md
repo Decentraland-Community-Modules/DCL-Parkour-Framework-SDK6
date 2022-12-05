@@ -13,7 +13,7 @@ This module provides users an easy to use interface for creating and managing pa
 
 This module has been heavily documented and will work as-is/out of the box. You can get a quick overview of all the module's current features in-game [here](https://decentraland-parkour-kit.herokuapp.com/).
 
-or by downloading the scene and running it locally (ensure you have the DCL SDK installed).
+Or you can download the scene and run it locally (ensure you have the DCL SDK installed).
 
 File Overview:
 
