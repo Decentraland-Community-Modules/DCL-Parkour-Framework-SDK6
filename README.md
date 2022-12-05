@@ -18,9 +18,11 @@ or by downloading the scene and running it locally (ensure you have the DCL SDK 
 File Overview:
 
 	game.ts: demo of on-start code
+	
 	utilities: bundled library for secondary/support features
 	   collections.ts: lists and dicts
 	   menu-group-2D.ts: easy management system for creating 2D HUD/menu
+	   
 	parkour-core: contains all primary module features
 	   /config: contains data that defines placement for objects around the scene (if new, start here!)
 	   /data: contains data that defines styles and object defaults that will be used by the system
